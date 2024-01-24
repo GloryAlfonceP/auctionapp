@@ -9,7 +9,7 @@
 }
 </style>
 <head>
-<title>Glorys Message Box</title>
+<title>Auction</title>
 <link
 	href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
 	rel="stylesheet">
@@ -21,7 +21,6 @@
 				<b>Invalid Request</b>
 			</h4>
 			<br>
-			<button type="submit" formaction="getAllMsgs">See a Message</button>
 			<button type="submit" formaction="/">Home</button>
 		</div>
 	</form>

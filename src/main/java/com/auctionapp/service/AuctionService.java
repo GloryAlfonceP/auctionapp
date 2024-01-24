@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.auctionapp.dao.AuctionDao;
@@ -54,31 +55,25 @@ public class AuctionService implements AuctionDao {
 	private static final Logger LOGGER = LogManager.getLogger(AuctionService.class);
 
 	public ArrayList<Item> displayAuctionitems() {
-		Query subQry = entityManager.createQuery("Select auctionItm from Auction where auctionStatus!='closed'");
-		List<String> subQryitmLst = subQry.getResultList();
+
 		Query displayAuctionitemsQry = entityManager
-				.createQuery("SELECT itmId,itmName,itmDesc FROM Item t1 where itmId not in (:itmIds)")
-				.setParameter("itmIds", subQryitmLst);
-		ArrayList<Item> dsplyItmLst = (ArrayList<Item>) displayAuctionitemsQry.getResultList();
+				.createQuery("SELECT itmId,itmName,itmDesc FROM Item t1 where auctionStatus not in ('closed')");
 		ArrayList<Item> dsplyItmLst2 = (ArrayList<Item>) itmRepository.findAll();
 		ArrayList<Item> newLst = (ArrayList<Item>) displayAuctionitemsQry.getResultList();
-		System.out.println("---------------------------------" + dsplyItmLst.size());
-
-		ArrayList<Item> result = (ArrayList<Item>) displayAuctionitemsQry.getResultList();
-		Iterator itr = result.iterator();
-
+		Object obj1 = displayAuctionitemsQry.getResultList();
+		Iterator itr = newLst.iterator();
+		ArrayList<Item> resuldLst = new ArrayList<Item>();
 		while (itr.hasNext()) {
-			Item tmpitm;
+			Item itm;
 			Object[] obj = (Object[]) itr.next();
 			String tmpItmid = (String) obj[0];
 			String tmpItmid1 = (String) obj[1];
 			String tmpItmid2 = (String) obj[2];
-			tmpitm = new Item(tmpItmid, tmpItmid1, tmpItmid2);
-			newLst.add(tmpitm);
-			
-
+			itm = new Item(tmpItmid, tmpItmid1, tmpItmid2);
+			resuldLst.add(itm);
+			System.out.println("--------------------------------- EEEEEEEEEEE " + tmpItmid + " " + tmpItmid1);
 		}
-		System.out.println("---------------------------------1 " + newLst.get(0).getItmId());
+
 		return dsplyItmLst2;
 	}
 
@@ -146,23 +141,26 @@ public class AuctionService implements AuctionDao {
 		}
 
 		int sortedBidsSize = sortedBids.size();
-		LOGGER.info("********************************* size  " + sortedBidsSize);
 		Bid firstBid = sortedBids.get(sortedBidsSize - 1);
 		Bid secondBid = sortedBids.get(sortedBidsSize - 2);
-		LOGGER.info("********************************* winningbidssssss " + firstBid.getBidPrice() + " "
-				+ secondBid.getBidPrice());
-		LOGGER.info("********************************* winningbidssssss " + firstBid.getBidTs() + " "
-				+ secondBid.getBidTs());
-		if (firstBid.getBidPrice() == secondBid.getBidPrice()) {
-			if (firstBid.getBidTs().before(secondBid.getBidTs())) {
-				WinningBidId = firstBid.getBidId();
-			} else if (secondBid.getBidTs().before(firstBid.getBidTs())) {
+		LOGGER.info("********************************* 1stwinningbids " + firstBid.getBidPrice() + " "
+				+ firstBid.getBidTs() + " " + firstBid.getBidId());
+		LOGGER.info("********************************* 2ndwinningbids " + secondBid.getBidPrice() + " "
+				+ secondBid.getBidTs() + " " + secondBid.getBidId());
+		if (firstBid.getBidPrice().equals(secondBid.getBidPrice())) {
+
+			if (secondBid.getBidTs().before(firstBid.getBidTs())) {
+
 				WinningBidId = secondBid.getBidId();
+			} else if(secondBid.getBidTs().after(firstBid.getBidTs())) {
+	
+				WinningBidId = firstBid.getBidId();
 			}
 		} else {
 			WinningBidId = firstBid.getBidId();
 		}
-		LOGGER.info("********************************* winningbid " + WinningBidId);
+		LOGGER.info("********************************* winningbid " + WinningBidId + session.getAttribute("usrId"));
+		markItemSold(itm, WinningBidId);
 		Bid bid1 = getWinnerDetails(WinningBidId, model);
 		return bid1;
 
@@ -171,23 +169,40 @@ public class AuctionService implements AuctionDao {
 	private Bid getWinnerDetails(String WinningBid, Model model) {
 
 		Query getWinnerDtlsQry = entityManager
-				.createQuery("SELECT bidId,bidPrice,bidItm FROM Bid t1 where bidId in (:bidId)")
+				.createQuery("SELECT bidId,bidPrice,bidItm,bidUsr FROM Bid t1 where bidId in (:bidId)")
 				.setParameter("bidId", WinningBid);
 		List winnerLst = getWinnerDtlsQry.getResultList();
 
-		System.out.println(winnerLst.size());
 		Bid bid = null;
 		for (Object record : winnerLst) {
 			Object[] fields = (Object[]) record;
-
 			String id = (String) fields[0];
 			Integer name = (Integer) fields[1];
-			System.out.printf("id: %s, name: %s%n", id, name);
-			bid = new Bid((String) fields[0], (Integer) fields[1], (String) fields[0]);
+			String id1 = (String) fields[2];
+			String id2 = (String) fields[3];
+			System.out.println(id + name + id1 + id2);
+			bid = new Bid((String) fields[0], (Integer) fields[1], (String) fields[2], (String) fields[3]);
 		}
-
 		return bid;
+	}
+
+	public void closeBid(@ModelAttribute("closeForm") Item itm) {
+		Query closeBidQry = entityManager.createQuery("update Item set auctionStatus = 'closed' where itmId = (:Id)");
+
+		closeBidQry.setParameter("Id", itm.getItmId());
+		closeBidQry.executeUpdate();
+		System.out.println("---------------------------------INSIDE closeBid Success");
 
 	}
 
+	public void markItemSold(@ModelAttribute("closeForm") Item itm, String winBid) {
+		Query markItmQry = entityManager.createQuery("update Item set auctionStatus = 'closed' where itmId = (:Id)");
+		markItmQry.setParameter("Id", itm.getItmId());
+		markItmQry.executeUpdate();
+		Query mrkBidQry = entityManager.createQuery("update Bid set isSuccess = true where bidId = (:bId)");
+		mrkBidQry.setParameter("bId", winBid);
+		mrkBidQry.executeUpdate();
+		System.out.println("---------------------------------INSIDE markItemSold Items Marked Success");
+
+	}
 }

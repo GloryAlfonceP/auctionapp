@@ -11,6 +11,9 @@ insert into users (usr_token,usr_id,usr_name,usr_role,usr_balance) values ('US18
 insert into item (min_price,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (550,'Antiq watch. Gold Color.Made in Germany', 'it102' ,'cbss.jpg','Antica' , '101' );
 insert into item (min_price,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (550,'MultiColor Renaissence Painting,1890', 'it122' ,'mrps.jpg','Soltitude' , '182' );
 insert into item (min_price,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'Marlyin manroe dress from 1950', 'it123' ,'mmds.jpg','Marilyn' , '117' );
+insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'closed','Gandhi Pen', 'it133' ,'mmds.jpg','pen' , '117' );
+insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'closed','Germania', 'it183' ,'mmds.jpg','Germania' , '117' );
+insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'','Sigma', 'it141' ,'mmds.jpg','Sigma' , '117' );
 
 
 insert into bid (bid_price,bid_ts,is_success,bid_id,bid_itm,bid_usr) values (520 , current_timestamp, false , 'b129' , 'it122' , '101' );
@@ -22,5 +25,5 @@ insert into bid (bid_price,bid_ts,is_success,bid_id,bid_itm,bid_usr) values (670
 insert into bid (bid_price,bid_ts,is_success,bid_id,bid_itm,bid_usr) values (870 , current_timestamp, true , 'b121' , 'it122' , '101' );
 insert into bid (bid_price,bid_ts,is_success,bid_id,bid_itm,bid_usr) values (1000 , current_timestamp, true , 'b108' , 'it122' , '101' );
 
-insert into auction (auction_id,auction_itm,auction_status,bid_id,buyer,payment,seller,winning_bid) values ('9154','it122','closed','b129','101','cash','182','b120');
-insert into auction (auction_id,auction_itm,auction_status,bid_id,buyer,payment,seller,winning_bid) values ('9134','it123','open','b123',null,null,'117',null);
+insert into auction (auction_id,auction_itm,bid_id,buyer,payment,seller,winning_bid) values ('9154','it122','b129','101','cash','182','b120');
+insert into auction (auction_id,auction_itm,bid_id,buyer,payment,seller,winning_bid) values ('9134','it123','b123',null,null,'117',null);

@@ -41,7 +41,7 @@ public class AuctionController {
 
 		System.out.println("---------------------------------INSIDE USERLOGIN Method");
 		dsplyItmLst = auctionService.displayAuctionitems();
-	
+
 		model.addAttribute("usrRole", usr.getUsrRole());
 		model.addAttribute("itmLst", dsplyItmLst);
 		usrMap.put("usrId", usr.getUsrId());
@@ -81,11 +81,12 @@ public class AuctionController {
 	}
 
 	@PostMapping(value = "/closeBid")
-	public String closeBid(@ModelAttribute("sellerForm") Item itm, Users usr, Model model, HttpSession session) {
+	public String closeBid(@ModelAttribute("closeForm") Item itm, Users usr, Model model, HttpSession session) {
 		// auctionService.postItmToSale(itm);
 		model.addAttribute("bidItm", itm.getItmId());
-		System.out.println("---------------------------------INSIDE removeItmToSale Method");
-		return "auction";
+		auctionService.closeBid(itm);
+		System.out.println("---------------------------------INSIDE closeBid Method");
+		return "seller";
 	}
 
 	@PostMapping(value = "/seeWinner")
@@ -102,6 +103,7 @@ public class AuctionController {
 		String tmp = b.getBidPrice() + "";
 		winnerMap.put("bidPrice", tmp);
 		winnerMap.put("bidUsr", b.getBidUsr());
+		winnerMap.put("bidItm", b.getBidItm());
 		return new ModelAndView("display", winnerMap);
 
 	}

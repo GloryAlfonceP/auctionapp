@@ -24,8 +24,6 @@ public class Auction {
 	public String buyer; // [fk]
 	@Column
 	public String payment;
-	@Column
-	public String auctionStatus;
 
 	public Auction(String auctionId, String auctionItm, Integer minPrice, String seller, String bidId,
 			String winningBid, String buyer, String payment) {
@@ -38,14 +36,6 @@ public class Auction {
 		this.winningBid = winningBid;
 		this.buyer = buyer;
 		this.payment = payment;
-	}
-
-	public String getAuctionStatus() {
-		return auctionStatus;
-	}
-
-	public void setAuctionStatus(String auctionStatus) {
-		this.auctionStatus = auctionStatus;
 	}
 
 	public String getAuctionId() {

@@ -21,17 +21,31 @@ public class Item {
 	public String itmOwner;
 	@Column
 	public Integer minPrice;
+	@Column
+	public String auctionStatus;
 
-	public Item(String itmId, String itmName, String itmOwner, Integer minPrice) {
+	public Item(String itmId, String itmName, String itmDesc, String itmImage, String itmOwner, Integer minPrice,
+			String auctionStatus) {
 		super();
 		this.itmId = itmId;
 		this.itmName = itmName;
+		this.itmDesc = itmDesc;
+		this.itmImage = itmImage;
 		this.itmOwner = itmOwner;
 		this.minPrice = minPrice;
+		this.auctionStatus = auctionStatus;
 	}
 
 	public Item() {
 
+	}
+
+	public String getAuctionStatus() {
+		return auctionStatus;
+	}
+
+	public void setAuctionStatus(String auctionStatus) {
+		this.auctionStatus = auctionStatus;
 	}
 
 	public Item(String itmId, String itmName, String itmDesc) {

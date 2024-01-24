@@ -42,12 +42,14 @@ body {
 		<h4>Winnner</h4>
 		<table id="myTable"">
 			<tr class="header">
+				<th style="width: 30%;">Item</th>
 				<th style="width: 30%;">Winner</th>
 				<th style="width: 30%;">Winning price</th>
 				<th style="width: 100%;">Winner</th>
 			</tr>
 			<c:forEach items="${itmLst}" var="itmVar">
 				<tr>
+					<td>${bidItm}</td>
 					<td>${bidId}</td>
 					<td>${bidPrice}</td>
 					<td>${bidUsr}</td>

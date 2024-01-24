@@ -237,12 +237,15 @@ button:hover {
 		<button type="submit" formaction="/seeWinner">Auction Winner</button>
 	</form>
 	<form method="post" action="/closeBid">
-		<button type="submit" formaction="/closeBid">Close Bid</button>
+		<div class="item">
+			<label>Item to close<span>*</span></label> <input id="itmId"
+				type="text" name="itmId" required />
+		</div>
+		<button type="submit" onclick="myFunction()">Close Bid</button>
 	</form>
 	<form method="get"">
 		<button type="submit" formaction="/">Home</button>
 	</form>
 
 </body>
-
 </html>

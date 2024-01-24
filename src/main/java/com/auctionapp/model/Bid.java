@@ -46,9 +46,9 @@ public class Bid {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Bid(String bidId, Integer bidPrice, String bidItm) {
+	public Bid(String bidId, Integer bidPrice, String bidItm, String bidUsr) {
 		this.bidId = bidId;
-
+		this.bidUsr = bidUsr;
 		this.bidPrice = bidPrice;
 		this.bidItm = bidItm;
 	}

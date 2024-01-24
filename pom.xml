@@ -75,6 +75,7 @@
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>glassfish-jstl</artifactId>
 		</dependency>
+
 	</dependencies>
 
 	<build>
