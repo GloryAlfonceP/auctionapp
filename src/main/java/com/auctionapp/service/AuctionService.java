@@ -9,18 +9,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.auctionapp.dao.AuctionDao;
 import com.auctionapp.model.Bid;
@@ -71,7 +66,7 @@ public class AuctionService implements AuctionDao {
 			String tmpItmid2 = (String) obj[2];
 			itm = new Item(tmpItmid, tmpItmid1, tmpItmid2);
 			resuldLst.add(itm);
-			System.out.println("--------------------------------- EEEEEEEEEEE " + tmpItmid + " " + tmpItmid1);
+			System.out.println("---------------------------------s" + tmpItmid + " " + tmpItmid1);
 		}
 
 		return dsplyItmLst2;
@@ -152,8 +147,8 @@ public class AuctionService implements AuctionDao {
 			if (secondBid.getBidTs().before(firstBid.getBidTs())) {
 
 				WinningBidId = secondBid.getBidId();
-			} else if(secondBid.getBidTs().after(firstBid.getBidTs())) {
-	
+			} else if (secondBid.getBidTs().after(firstBid.getBidTs())) {
+
 				WinningBidId = firstBid.getBidId();
 			}
 		} else {
