@@ -1,6 +1,5 @@
 package com.auctionapp.model;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
@@ -9,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "bid")
+@Table(name = "Bid")
 public class Bid {
 	@Id
 	@Column
@@ -25,6 +24,10 @@ public class Bid {
 	@Column
 	public Boolean isSuccess;
 
+	public Bid() {
+		super();
+	}
+
 	public Bid(String bidId, String bidItem, String bidUser, Integer bidprice, Timestamp b_ts, Boolean isSuccess) {
 		super();
 		this.bidId = bidId;
@@ -35,6 +38,21 @@ public class Bid {
 		this.isSuccess = isSuccess;
 	}
 
+	public Bid(String bidId, Integer bidPrice, Timestamp bidTs) {
+		this.bidId = bidId;
+
+		this.bidPrice = bidPrice;
+		this.bidTs = bidTs;
+		// TODO Auto-generated constructor stub
+	}
+
+	public Bid(String bidId, Integer bidPrice, String bidItm) {
+		this.bidId = bidId;
+
+		this.bidPrice = bidPrice;
+		this.bidItm = bidItm;
+	}
+
 	public String getBidId() {
 		return bidId;
 	}
@@ -43,36 +61,36 @@ public class Bid {
 		this.bidId = bidId;
 	}
 
-	public String getBidItem() {
+	public String getBidItm() {
 		return bidItm;
 	}
 
-	public void setBidItem(String bidItem) {
-		this.bidItm = bidItem;
+	public void setBidItm(String bidItm) {
+		this.bidItm = bidItm;
 	}
 
-	public String getBidUser() {
+	public String getBidUsr() {
 		return bidUsr;
 	}
 
-	public void setBidUser(String bidUser) {
-		this.bidUsr = bidUser;
+	public void setBidUsr(String bidUsr) {
+		this.bidUsr = bidUsr;
 	}
 
-	public Integer getBidprice() {
+	public Integer getBidPrice() {
 		return bidPrice;
 	}
 
-	public void setBidprice(Integer bidprice) {
-		this.bidPrice = bidprice;
+	public void setBidPrice(Integer bidPrice) {
+		this.bidPrice = bidPrice;
 	}
 
-	public Timestamp getB_ts() {
+	public Timestamp getBidTs() {
 		return bidTs;
 	}
 
-	public void setB_ts(Timestamp b_ts) {
-		this.bidTs = b_ts;
+	public void setBidTs(Timestamp bidTs) {
+		this.bidTs = bidTs;
 	}
 
 	public Boolean getIsSuccess() {

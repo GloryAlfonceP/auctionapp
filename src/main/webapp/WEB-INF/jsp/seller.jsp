@@ -32,7 +32,7 @@ h1 {
 }
 
 form {
-	width: 60%;
+	width: 40%;
 	padding: 20px;
 	border-radius: 6px;
 	background: #fff;
@@ -212,28 +212,37 @@ button:hover {
 </head>
 <body class="body">
 	<div class="testbox">
-		<form method="post" modelAttribute="loginForm" action="login">
+		<form method="post" modelAttribute="sellerForm" action="postItm">
 			<div class="banner">
-				<h2>Login</h2>
+				<h2>Item to sell</h2>
 			</div>
 			<div class="item">
-				<label>Item to sell<span>*</span></label> <input id="usrId" type="text"
-					name="usrId" required />
+				<label>Item to sell<span>*</span></label> <input id="itmId"
+					type="text" name="itmId" required />
 			</div>
 			<div class="item">
-				<label>Item desc<span>*</span></label> <input id="pw" type="text" name="pw"
-					required />
+				<label>Item Name<span>*</span></label> <input id="itmName"
+					type="text" name="itmName" required />
 			</div>
 			<div class="item">
-				<label>Min price<span>*</span></label> <input id="usrRole" type="text"
-					name="usrRole" required />
+				<label>Min price<span>*</span></label> <input id="minPrice"
+					type="text" name="minPrice" required />
 			</div>
 			<div class="btn-block">
 				<button type="submit">SUBMIT</button>
 			</div>
 		</form>
 	</div>
-
+	<form method="get" action="seeWinner">
+		<button type="submit" formaction="/seeWinner">Auction Winner</button>
+	</form>
+	<form method="post" action="/closeBid">
+		<button type="submit" formaction="/closeBid">Close Bid</button>
+	</form>
+	<form method="get"">
+		<button type="submit" formaction="/">Home</button>
+	</form>
 
 </body>
+
 </html>

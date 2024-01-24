@@ -17,7 +17,7 @@
 h1 {
 	position: absolute;
 	margin: 0;
-	font-size: 40px;
+	font-size: 20px;
 	color: #fff;
 	z-index: 2;
 	line-height: 80px;
@@ -29,19 +29,22 @@ h1 {
 	align-items: center;
 	height: inherit;
 	padding: 20px;
+	width: calc(100% - 50px);
 }
 
 form {
 	width: 60%;
+	height: 100%;
 	padding: 20px;
 	border-radius: 6px;
 	background: #fff;
 	box-shadow: 0 0 8px #cc7a00;
+	padding: 20px;
 }
 
 .banner {
 	position: relative;
-	height: 80px;
+	height: 50px;
 	background-size: cover;
 	display: flex;
 	justify-content: center;
@@ -64,16 +67,7 @@ input, select, textarea {
 }
 
 input {
-	width: calc(100% - 10px);
-	padding: 5px;
-}
-
-input[type="date"] {
-	padding: 4px 5px;
-}
-
-textarea {
-	width: calc(100% - 12px);
+	width: calc(100% - 5px);
 	padding: 5px;
 }
 
@@ -103,7 +97,7 @@ input[type="date"]::-webkit-inner-spin-button {
 
 .item i, input[type="date"]::-webkit-calendar-picker-indicator {
 	position: absolute;
-	font-size: 20px;
+	font-size: 11px;
 	color: #cc7a00;
 }
 
@@ -177,18 +171,56 @@ input[type=radio]:checked+label:after {
 }
 
 button {
-	width: 150px;
-	padding: 10px;
+	width: 60px;
+	padding: 5px;
 	border: none;
 	border-radius: 5px;
 	background: #cc7a00;
-	font-size: 16px;
+	font-size: 8px;
 	color: #fff;
 	cursor: pointer;
+	position: relative;
 }
 
 button:hover {
 	background: #ff9800;
+}
+
+.Miniitem:hover p, .Miniitem:hover i, .question:hover p, .question label:hover,
+	input:hover::placeholder {
+	color: #cc7a00;
+}
+
+.Miniitem input:hover, .Miniitem select:hover, .Miniitem textarea:hover
+	{
+	border: 1px solid transparent;
+	box-shadow: 0 0 3px 0 #cc7a00;
+	color: #cc7a00;
+}
+
+.Miniitem {
+	position: relative;
+	margin: 10px 0;
+}
+
+.Miniitem span {
+	color: red;
+}
+
+input[type="date"]::-webkit-inner-spin-button {
+	display: none;
+}
+
+.Miniitem i, input[type="date"]::-webkit-calendar-picker-indicator {
+	position: absolute;
+	font-size: 6px;
+	color: #cc7a00;
+}
+
+.Miniitem i {
+	right: 1%;
+	top: 30px;
+	z-index: 1;
 }
 
 @media ( min-width : 568px) {
@@ -208,8 +240,36 @@ button:hover {
 		padding-bottom: 5px;
 	}
 }
+
+.collapsible {
+	background-color: #cc7a00;
+	color: white;
+	cursor: pointer;
+	padding: 6px;
+	width: 10%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 10px;
+}
+
+.active, .collapsible:hover {
+	background-color: #555;
+}
+
+.content {
+	width: 90%;
+	height: 50% padding: 0 18px;
+	display: none;
+	overflow: hidden;
+	background-color: #f1f1f1;
+}
 </style>
 </head>
+<script type="text/javascript">
+	
+</script>
+
 <body class="body">
 	<div class="testbox">
 		<form method="post" modelAttribute="loginForm" action="login">
@@ -219,21 +279,23 @@ button:hover {
 			<div class="item">
 				<label>User Id<span>*</span></label> <input id="usrId" type="text"
 					name="usrId" required />
+				<%
+				request.getSession().setAttribute("usrId", request.getParameter("usrId"));
+				%>
 			</div>
 			<div class="item">
 				<label>pw<span>*</span></label> <input id="pw" type="text" name="pw"
 					required />
 			</div>
 			<div class="item">
-				<label>Role<span>*</span></label> <input id="usrRole" type="text"
-					name="usrRole" required />
-			</div>
-			<div class="btn-block">
-				<button type="submit">SUBMIT</button>
+				<label>Role <span>*</span></label> <input class="btn-block"
+					name="usrRole" type="submit" value="seller" /> <input
+					class="btn-block" name="usrRole" type="submit" value="buyer" />
+				<%
+				request.getSession().setAttribute("usrRole", request.getParameter("usrRole"));
+				%>
 			</div>
 		</form>
 	</div>
-
-
 </body>
 </html>

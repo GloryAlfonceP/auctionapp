@@ -15,7 +15,7 @@ public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public String usrToken;
-	@Column(unique=true)
+	@Column(unique = true)
 	@Nonnull
 	public String usrId;
 	@Column

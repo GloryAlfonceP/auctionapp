@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "item")
+@Table(name = "Item")
 public class Item {
 	@Id
 	@Column
@@ -22,13 +22,31 @@ public class Item {
 	@Column
 	public Integer minPrice;
 
-	public Item(String itmId, String itmName, String itmDesc, String itmImage, String itmOwner) {
+	public Item(String itmId, String itmName, String itmOwner, Integer minPrice) {
+		super();
+		this.itmId = itmId;
+		this.itmName = itmName;
+		this.itmOwner = itmOwner;
+		this.minPrice = minPrice;
+	}
+
+	public Item() {
+
+	}
+
+	public Item(String itmId, String itmName, String itmDesc) {
 		super();
 		this.itmId = itmId;
 		this.itmName = itmName;
 		this.itmDesc = itmDesc;
-		this.itmImage = itmImage;
-		this.itmOwner = itmOwner;
+	}
+
+	public Integer getMinPrice() {
+		return minPrice;
+	}
+
+	public void setMinPrice(Integer minPrice) {
+		this.minPrice = minPrice;
 	}
 
 	public String getItmId() {

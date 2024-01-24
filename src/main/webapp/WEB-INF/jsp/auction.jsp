@@ -6,6 +6,15 @@
 <title>Inbox</title>
 </head>
 <style>
+h1 {
+	position: absolute;
+	margin: 0;
+	font-size: 20px;
+	color: black;
+	z-index: 2;
+	line-height: 20px;
+}
+
 #myInput {
 	width: 30%; /* Full-width */
 	font-size: 10px; /* Increase font-size */
@@ -16,9 +25,12 @@
 
 #myTable {
 	border-collapse: collapse; /* Collapse borders */
-	width: 50%; /* Full-width */
+	width: 80%; /* Full-width */
 	border: 3px solid #808080; /* Add a grey border */
 	font-size: 18px; /* Increase font-size */
+	float: center;
+	align-items: center;
+	position: relative;
 }
 
 #myTable th {
@@ -44,9 +56,9 @@
 }
 
 #body {
-	width: 50%; /* Full-width */
-	float: right align-items: right;
-	background-color: powderblue;
+	width: 40%; /* Full-width */
+	float: right;
+	align-items: right;
 }
 
 .buttonClass {
@@ -56,32 +68,56 @@
 }
 </style>
 <body>
+	<h1>Live Auction</h1>
 	<div id="body">
 		<input type="text" id="myInput" onkeyup="myFunction1()"
 			placeholder="Search ">
 	</div>
-</body>
-<br>
-<br>
-<table id="myTable">
-	<tr class="header">
-		<th style="width: 50%;" onclick="sortTable(0)">Name</th>
-		<th style="width: 60%;" onclick="sortTable(1)">Message</th>
-	</tr>
-	<c:forEach items="${msgs}" var="msgVar">
-		<tr>
-			<td>${msgVar.name}</td>
-			<td>${msgVar.msg}</td>
+	<br>
+	<br>
+	<table id="myTable" onload="gettext()">
+		<tr class="header">
+			<th style="width: 30%;" onclick="sortTable(0)">Item</th>
+			<th style="width: 30%;" onclick="sortTable(1)">Item Name</th>
+			<th style="width: 100%;" onclick="sortTable(1)">Item Desc</th>
 		</tr>
-	</c:forEach>
-</table>
-<form method="get" modelAttribute="msgForm" action="getAllMsgs">
-	<div class=buttonClass>
-		<br>
-		<button type="submit" formaction="getAllMsgs">See a Message</button>
-		<button type="submit" formaction="/">Home</button>
-	</div>
-</form>
+		<c:forEach items="${itmLst}" var="itmVar">
+			<tr>
+				<td>${itmVar.itmId}</td>
+				<td>${itmVar.itmName}</td>
+				<td>${itmVar.itmDesc}</td>
+			</tr>
+		</c:forEach>
+	</table>
+	<br>
+	<form method="post" modelAttribute="bidform" action="postBid">
+		<table>
+			<tr>
+				<th style="width: 30%;">User Token</th>
+				<th style="width: 30%;">Item Id</th>
+				<th style="width: 30%;">Bidding Price</th>
+			</tr>
+			<tr>
+				<td><input id="usrToken" type="text" name="usrToken" required /></td>
+				<td><input id="bidItm" type="text" name="bidItm" required
+					<%request.getSession().setAttribute("bidItm", request.getParameter("bidItm"));%> /></td>
+				<td><input id="bidPrice" type="text" name="bidPrice" required /></td>
+				<td><button type="submit">Submit</button></td>
+			</tr>
+
+		</table>
+	</form>
+	<form method="post" modelAttribute="sellerForm" action="seeWinner">
+		<button type="submit" formaction="/seeWinner">Auction Winner</button>
+	</form>
+	<form method="get" modelAttribute="msgForm"
+		action="displayAuctionitems">
+		<div class=buttonClass>
+			<br>
+			<button type="submit" formaction="/">Home</button>
+		</div>
+	</form>
+</body>
 <script>
 	function myFunction1() {
 		var input, filter, table, tr, td, i, txtValue;
@@ -156,5 +192,10 @@
 			}
 		}
 	}
+	<script type="text/javascript">
+	function gettext() {
+		alert(document.getElementById("displayTable").contentDocument.body.innerText);
+	}
+</script>
 </script>
 </html>
