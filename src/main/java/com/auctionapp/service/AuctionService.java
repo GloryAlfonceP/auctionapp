@@ -18,9 +18,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.auctionapp.dao.AuctionDao;
+import com.auctionapp.model.Auction;
 import com.auctionapp.model.Bid;
 import com.auctionapp.model.Item;
 import com.auctionapp.model.Users;
+import com.auctionapp.repository.AuctionRepository;
 import com.auctionapp.repository.BidRepository;
 import com.auctionapp.repository.ItemRepository;
 
@@ -40,6 +42,9 @@ public class AuctionService implements AuctionDao {
 	@Autowired
 	BidRepository bidRepository;
 
+	@Autowired
+	AuctionRepository auctionRepository;
+
 	public String WinningBidId = "";
 	Map<String, String> winDtlMap = new HashMap<>();
 
@@ -48,7 +53,6 @@ public class AuctionService implements AuctionDao {
 	private static final Logger LOGGER = LogManager.getLogger(AuctionService.class);
 
 	public ArrayList<Item> displayAuctionitems() {
-
 		Query displayAuctionitemsQry = entityManager
 				.createQuery("SELECT itmId,itmName,itmDesc FROM Item t1 where auctionStatus not in ('closed')");
 		ArrayList<Item> newLst = (ArrayList<Item>) displayAuctionitemsQry.getResultList();
@@ -65,39 +69,6 @@ public class AuctionService implements AuctionDao {
 			resuldLst.add(itm);
 		}
 		return resuldLst;
-	}
-
-	public void postItmToSale(Item itm) {
-		try {
-			itmRepository.save(itm);
-			LOGGER.info("*********************************INSERT ITEM to SELL SUCCESS");
-		} catch (Exception e) {
-			LOGGER.error("*********************************INSERT ITEM to SELL FAIL");
-
-		}
-	}
-
-	public void postBid(Bid bd, Users usr) {
-		int max = 10000;
-		int min = 10;
-		int range = max - min + 1;
-		int randomWithMathRandom = (int) (Math.random() * range) + min;
-		Date date = new Date();
-		String bidId = "b" + randomWithMathRandom;
-		Query insertBidQry = entityManager.createQuery("insert into Bid (bidPrice,bidTs,bidId,bidItm,bidUsr) values "
-				+ "(:bidPrice,:ts,:bidId,:bidItm,:bidUsr)");
-		insertBidQry.setParameter("bidPrice", bd.getBidPrice());
-		insertBidQry.setParameter("ts", new Timestamp(date.getTime()));
-		insertBidQry.setParameter("bidId", bidId);
-		insertBidQry.setParameter("bidItm", bd.getBidItm());
-		insertBidQry.setParameter("bidUsr", usr.getUsrToken());
-		try {
-			insertBidQry.executeUpdate();
-			LOGGER.info("*********************************INSERT BID SUCCESS");
-		} catch (Exception e) {
-
-			LOGGER.error("*********************************INSERT BID FAIL");
-		}
 	}
 
 	public Bid calcWinner(Item itm, Users usr, Bid bd, Model model, HttpSession session) {
@@ -153,12 +124,12 @@ public class AuctionService implements AuctionDao {
 		LOGGER.info("********************************* winningbid " + WinningBidId + session.getAttribute("usrId"));
 		markItemSold(itm, WinningBidId);
 		Bid bid1 = getWinnerDetails(WinningBidId, model);
+		makeAuctionEntry(bid1);
 		return bid1;
 
 	}
 
 	private Bid getWinnerDetails(String WinningBid, Model model) {
-
 		Query getWinnerDtlsQry = entityManager
 				.createQuery("SELECT bidId,bidPrice,bidItm,bidUsr FROM Bid t1 where bidId in (:bidId)")
 				.setParameter("bidId", WinningBid);
@@ -176,15 +147,6 @@ public class AuctionService implements AuctionDao {
 		return bid;
 	}
 
-	public void closeBid(@ModelAttribute("closeForm") Item itm) {
-		Query closeBidQry = entityManager.createQuery("update Item set auctionStatus = 'closed' where itmId = (:Id)");
-
-		closeBidQry.setParameter("Id", itm.getItmId());
-		closeBidQry.executeUpdate();
-		System.out.println("---------------------------------INSIDE closeBid Success");
-
-	}
-
 	public void markItemSold(@ModelAttribute("closeForm") Item itm, String winBid) {
 		Query markItmQry = entityManager.createQuery("update Item set auctionStatus = 'closed' where itmId = (:Id)");
 		markItmQry.setParameter("Id", itm.getItmId());
@@ -193,6 +155,19 @@ public class AuctionService implements AuctionDao {
 		mrkBidQry.setParameter("bId", winBid);
 		mrkBidQry.executeUpdate();
 		System.out.println("---------------------------------INSIDE markItemSold Items Marked Success");
+
+	}
+
+	public void makeAuctionEntry(Bid bd) {
+		int max = 1000;
+		int min = 700;
+		int range = max - min + 1;
+		int randomWithMathRandom = (int) (Math.random() * range) + min;
+		String aidId = "a" + randomWithMathRandom;
+		Auction auction = new Auction( aidId,  bd.getBidItm() ,null,bd.getBidId(),
+				bd.getBidId() , bd.getBidUsr() , null);
+				auctionRepository.save(auction);
+		System.out.println("---------------------------------INSIDE makeAuctionEntry Auction Entry Marked Success");
 
 	}
 }

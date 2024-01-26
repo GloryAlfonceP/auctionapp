@@ -25,17 +25,20 @@ public class Auction {
 	@Column
 	public String payment;
 
-	public Auction(String auctionId, String auctionItm, Integer minPrice, String seller, String bidId,
-			String winningBid, String buyer, String payment) {
+	public Auction(String auctionId, String auctionItm, String seller, String bidId, String winningBid, String buyer,
+			String payment) {
 		super();
 		this.auctionId = auctionId;
 		this.auctionItm = auctionItm;
-
 		this.seller = seller;
 		this.bidId = bidId;
 		this.winningBid = winningBid;
 		this.buyer = buyer;
 		this.payment = payment;
+	}
+
+	public Auction() {
+		super();
 	}
 
 	public String getAuctionId() {

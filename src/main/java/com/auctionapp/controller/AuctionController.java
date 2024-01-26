@@ -17,6 +17,7 @@ import com.auctionapp.model.Bid;
 import com.auctionapp.model.Item;
 import com.auctionapp.model.Users;
 import com.auctionapp.service.AuctionService;
+import com.auctionapp.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,6 +26,10 @@ public class AuctionController {
 
 	@Autowired
 	AuctionService auctionService;
+
+	@Autowired
+	UserService usrService;
+
 	ArrayList<Item> dsplyItmLst = new ArrayList<>();
 
 	@GetMapping(value = "/")
@@ -59,14 +64,14 @@ public class AuctionController {
 	@PostMapping(value = "/postItm")
 	public String postItmToSale(@ModelAttribute("sellerForm") Item itm, Model model, HttpSession session) {
 		System.out.println("---------------------------------INSIDE postItmToSale Method");
-		auctionService.postItmToSale(itm);
+		usrService.postItmToSale(itm);
 		return "seller";
 	}
 
 	@PostMapping(value = "/postBid")
 	public String postbid(@ModelAttribute("bidform") Bid bd, Users usr, Model model, HttpSession session) {
 		System.out.println("---------------------------------INSIDE postbid Method");
-		auctionService.postBid(bd, usr);
+		usrService.postBid(bd, usr);
 		model.addAttribute("bidItm", bd.getBidItm());
 		model.addAttribute("itmLst", dsplyItmLst);
 		return "auction";
@@ -74,7 +79,7 @@ public class AuctionController {
 
 	@PostMapping(value = "/removeItmToSell")
 	public String removeItmToSale(@ModelAttribute("sellerForm") Item itm, Users usr, Model model, HttpSession session) {
-		auctionService.postItmToSale(itm);
+		usrService.postItmToSale(itm);
 		model.addAttribute("bidItm", itm.getItmId());
 		System.out.println("---------------------------------INSIDE removeItmToSale Method");
 		return "auction";
@@ -84,7 +89,7 @@ public class AuctionController {
 	public String closeBid(@ModelAttribute("closeForm") Item itm, Users usr, Model model, HttpSession session) {
 		// auctionService.postItmToSale(itm);
 		model.addAttribute("bidItm", itm.getItmId());
-		auctionService.closeBid(itm);
+		usrService.closeBid(itm);
 		System.out.println("---------------------------------INSIDE closeBid Method");
 		return "seller";
 	}
@@ -92,15 +97,15 @@ public class AuctionController {
 	@PostMapping(value = "/seeWinner")
 	public ModelAndView calcWinner(@ModelAttribute("sellerForm") Item itm, Users usr, Bid bd, Model model,
 			HttpSession session) {
+		System.out.println("---------------------------------INSIDE calcWinner Method");
 		Map<String, String> winnerMap = new HashMap<>();
 		if (session.getAttribute("bidItm") == null) {
 			winnerMap.put("errorMsg", "No Bids Placed");
 			return new ModelAndView("error", winnerMap);
 		}
-		System.out.println("---------------------------------INSIDE calcWinner Method");
 		model.addAttribute("bidItm", bd.getBidItm());
 		Bid b = auctionService.calcWinner(itm, usr, bd, model, session);
-		System.out.println("---------------------------------INSIDE calcWinner Method " + b.getBidId());
+		System.out.println("---------------------------------INSIDE calcWinner Method ");
 
 		winnerMap.put("bidId", b.getBidId());
 		String tmp = b.getBidPrice() + "";
