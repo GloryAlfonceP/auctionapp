@@ -92,12 +92,15 @@ public class AuctionController {
 	@PostMapping(value = "/seeWinner")
 	public ModelAndView calcWinner(@ModelAttribute("sellerForm") Item itm, Users usr, Bid bd, Model model,
 			HttpSession session) {
+		Map<String, String> winnerMap = new HashMap<>();
+		if (session.getAttribute("bidItm") == null) {
+			winnerMap.put("errorMsg", "No Bids Placed");
+			return new ModelAndView("error", winnerMap);
+		}
 		System.out.println("---------------------------------INSIDE calcWinner Method");
 		model.addAttribute("bidItm", bd.getBidItm());
 		Bid b = auctionService.calcWinner(itm, usr, bd, model, session);
 		System.out.println("---------------------------------INSIDE calcWinner Method " + b.getBidId());
-
-		Map<String, String> winnerMap = new HashMap<>();
 
 		winnerMap.put("bidId", b.getBidId());
 		String tmp = b.getBidPrice() + "";

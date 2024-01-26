@@ -18,7 +18,8 @@
 	<form method="get" modelAttribute="msgForm" action="getAllMsgs">
 		<div class=buttonClass>
 			<h4 style="font-size: 30px;">
-				<b>Invalid Request</b>
+				<b>Invalid Request , </b>
+				<b>${errorMsg }</b>
 			</h4>
 			<br>
 			<button type="submit" formaction="/">Home</button>

@@ -233,7 +233,7 @@ button:hover {
 			</div>
 		</form>
 	</div>
-	<form method="get" action="seeWinner">
+	<form method="post" action="seeWinner">
 		<button type="submit" formaction="/seeWinner">Auction Winner</button>
 	</form>
 	<form method="post" action="/closeBid">

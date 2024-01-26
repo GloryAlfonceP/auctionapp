@@ -41,8 +41,6 @@ public class AuctionService implements AuctionDao {
 	BidRepository bidRepository;
 
 	public String WinningBidId = "";
-	public String WinningBidName = "";
-	public Integer WinningPrice = null;
 	Map<String, String> winDtlMap = new HashMap<>();
 
 	@PersistenceContext
@@ -53,23 +51,20 @@ public class AuctionService implements AuctionDao {
 
 		Query displayAuctionitemsQry = entityManager
 				.createQuery("SELECT itmId,itmName,itmDesc FROM Item t1 where auctionStatus not in ('closed')");
-		ArrayList<Item> dsplyItmLst2 = (ArrayList<Item>) itmRepository.findAll();
 		ArrayList<Item> newLst = (ArrayList<Item>) displayAuctionitemsQry.getResultList();
-		Object obj1 = displayAuctionitemsQry.getResultList();
 		Iterator itr = newLst.iterator();
 		ArrayList<Item> resuldLst = new ArrayList<Item>();
+		Item itm;
 		while (itr.hasNext()) {
-			Item itm;
+
 			Object[] obj = (Object[]) itr.next();
 			String tmpItmid = (String) obj[0];
 			String tmpItmid1 = (String) obj[1];
 			String tmpItmid2 = (String) obj[2];
 			itm = new Item(tmpItmid, tmpItmid1, tmpItmid2);
 			resuldLst.add(itm);
-			System.out.println("---------------------------------s" + tmpItmid + " " + tmpItmid1);
 		}
-
-		return dsplyItmLst2;
+		return resuldLst;
 	}
 
 	public void postItmToSale(Item itm) {
@@ -80,7 +75,6 @@ public class AuctionService implements AuctionDao {
 			LOGGER.error("*********************************INSERT ITEM to SELL FAIL");
 
 		}
-
 	}
 
 	public void postBid(Bid bd, Users usr) {
@@ -113,7 +107,7 @@ public class AuctionService implements AuctionDao {
 
 		List<Bid> sortedBids = new ArrayList<Bid>();
 		for (int i = 0; i < finalistsBids.size(); i++) {
-
+			// check if bid_price > min_price of an item
 			if (finalistsBids.get(i).getBidPrice() > itmMinPrice) {
 				String tmp1 = finalistsBids.get(i).getBidId();
 				Integer tmp2 = finalistsBids.get(i).getBidPrice();
@@ -122,6 +116,7 @@ public class AuctionService implements AuctionDao {
 				sortedBids.add(newBid);
 			}
 		}
+		// Sort bid prices
 		Collections.sort(sortedBids, new Comparator<Bid>() {
 			public int compare(Bid o1, Bid o2) {
 				int c = o1.getBidTs().compareTo(o2.getBidTs());
@@ -130,11 +125,11 @@ public class AuctionService implements AuctionDao {
 				return o1.getBidPrice().compareTo(o2.getBidPrice());
 			}
 		});
+		// log data
 		for (int i = 0; i < sortedBids.size(); i++) {
 			LOGGER.info("********************************* sorted ID " + sortedBids.get(i).getBidId() + " "
 					+ sortedBids.get(i).getBidPrice() + " " + " " + sortedBids.get(i).getBidTs());
 		}
-
 		int sortedBidsSize = sortedBids.size();
 		Bid firstBid = sortedBids.get(sortedBidsSize - 1);
 		Bid secondBid = sortedBids.get(sortedBidsSize - 2);
@@ -142,6 +137,7 @@ public class AuctionService implements AuctionDao {
 				+ firstBid.getBidTs() + " " + firstBid.getBidId());
 		LOGGER.info("********************************* 2ndwinningbids " + secondBid.getBidPrice() + " "
 				+ secondBid.getBidTs() + " " + secondBid.getBidId());
+		// Compare bid timestamp
 		if (firstBid.getBidPrice().equals(secondBid.getBidPrice())) {
 
 			if (secondBid.getBidTs().before(firstBid.getBidTs())) {
@@ -167,7 +163,6 @@ public class AuctionService implements AuctionDao {
 				.createQuery("SELECT bidId,bidPrice,bidItm,bidUsr FROM Bid t1 where bidId in (:bidId)")
 				.setParameter("bidId", WinningBid);
 		List winnerLst = getWinnerDtlsQry.getResultList();
-
 		Bid bid = null;
 		for (Object record : winnerLst) {
 			Object[] fields = (Object[]) record;

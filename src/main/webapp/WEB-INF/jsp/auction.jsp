@@ -3,7 +3,7 @@
 	pageEncoding="ISO-8859-1"%>
 <html lang="en">
 <head>
-<title>Inbox</title>
+<title>Auction</title>
 </head>
 <style>
 h1 {

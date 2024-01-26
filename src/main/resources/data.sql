@@ -8,12 +8,12 @@ insert into users (usr_token,usr_id,usr_name,usr_role,usr_balance) values ('US10
 insert into users (usr_token,usr_id,usr_name,usr_role,usr_balance) values ('US117','117','gill','SELLER',600);
 insert into users (usr_token,usr_id,usr_name,usr_role,usr_balance) values ('US182','182','alice','BUYER',500);
 
-insert into item (min_price,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (550,'Antiq watch. Gold Color.Made in Germany', 'it102' ,'cbss.jpg','Antica' , '101' );
-insert into item (min_price,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (550,'MultiColor Renaissence Painting,1890', 'it122' ,'mrps.jpg','Soltitude' , '182' );
-insert into item (min_price,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'Marlyin manroe dress from 1950', 'it123' ,'mmds.jpg','Marilyn' , '117' );
+insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (550,'open','Antiq watch. Gold Color.Made in Germany', 'it102' ,'cbss.jpg','Antica' , '101' );
+insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (550,'open','MultiColor Renaissence Painting,1890', 'it122' ,'mrps.jpg','Soltitude' , '182' );
+insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'open','Marlyin manroe dress from 1950', 'it123' ,'mmds.jpg','Marilyn' , '117' );
 insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'closed','Gandhi Pen', 'it133' ,'mmds.jpg','pen' , '117' );
 insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'closed','Germania', 'it183' ,'mmds.jpg','Germania' , '117' );
-insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'','Sigma', 'it141' ,'mmds.jpg','Sigma' , '117' );
+insert into item (min_price,auction_status,itm_desc,itm_id,itm_image,itm_name,itm_owner) values (450,'open','Sigma', 'it141' ,'mmds.jpg','Sigma' , '117' );
 
 
 insert into bid (bid_price,bid_ts,is_success,bid_id,bid_itm,bid_usr) values (520 , current_timestamp, false , 'b129' , 'it122' , '101' );
